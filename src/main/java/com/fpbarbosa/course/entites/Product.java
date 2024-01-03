@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -11,6 +13,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 //Mapeamento para objeto relacional JPA
@@ -34,7 +37,11 @@ public class Product implements Serializable{
     @JoinTable(name = "tb_product_category", //tabela para relacionar produto com categoria
     joinColumns = @JoinColumn(name = "product_id"), //Chave estrangeira que relaciona com a tabela de produtos
     inverseJoinColumns = @JoinColumn(name = "category_id")) //Chave estrangeira que relaciona com a tabela de categoria
-    private Set<Category> categories = new HashSet<>(); //Conjunto de categorias
+    private Set<Category> categories = new HashSet<>(); //sem repetições da mesma categorias
+
+    @OneToMany (mappedBy = "id.product") //Um item para muitos pedidos, mapeado pela classe OrderItemPK
+    private Set<OrderItem> items = new HashSet<>();//sem repetições do mesmo item
+
 
     //Construtores:
     public Product(){
@@ -92,6 +99,15 @@ public class Product implements Serializable{
 
     public Set<Category> getCategories() {
         return categories;
+    }
+
+    @JsonIgnore
+    public Set<Order> getOrders(){
+        Set<Order> set = new HashSet<>();
+        for (OrderItem x : items){
+            set.add(x.getOrder());
+        }
+        return set;
     }
 
     //hashCode and equals somente para id:
