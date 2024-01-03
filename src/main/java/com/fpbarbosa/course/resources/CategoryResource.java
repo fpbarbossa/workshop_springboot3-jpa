@@ -3,9 +3,7 @@ package com.fpbarbosa.course.resources;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fpbarbosa.course.entites.Category;
-import com.fpbarbosa.course.entites.Order;
 import com.fpbarbosa.course.services.CategoryService;
-import com.fpbarbosa.course.services.OrderService;
 
 import java.util.List;
 
