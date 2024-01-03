@@ -2,6 +2,7 @@ package com.fpbarbosa.course.entites;
 
 import java.io.Serializable;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fpbarbosa.course.entites.pk.OrderItemPK;
 
 import jakarta.persistence.EmbeddedId;
@@ -10,21 +11,21 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "tb_order_item")//criar tabela no banco de dados
-public class OrdemItem implements Serializable{
+public class OrderItem implements Serializable{
     private static final long serialVersionUID = 1L;
     
     //Atributos basicos
     @EmbeddedId
-    private OrderItemPK id;
+    private OrderItemPK id = new OrderItemPK();
     
     private Integer quantity;
     private Double price;
 
     //Constutores
-    public OrdemItem(){
+    public OrderItem(){
     }
 
-    public OrdemItem(Order order, Product product, Integer quantity, Double price) {
+    public OrderItem(Order order, Product product, Integer quantity, Double price) {
         super();
         id.setOrder(order);//pedido do OrderItemPK
         id.setProduct(product);//produto do OrderItemPK
@@ -33,6 +34,7 @@ public class OrdemItem implements Serializable{
     }
 
     //Getters and Setters
+    @JsonIgnore
     public Order getOrder(){
         return id.getOrder();
     }
@@ -82,7 +84,7 @@ public class OrdemItem implements Serializable{
             return false;
         if (getClass() != obj.getClass())
             return false;
-        OrdemItem other = (OrdemItem) obj;
+        OrderItem other = (OrderItem) obj;
         if (id == null) {
             if (other.id != null)
                 return false;
