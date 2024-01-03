@@ -8,8 +8,10 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
-import jakarta.persistence.Transient;
 
 //Mapeamento para objeto relacional JPA
 @Entity
@@ -27,11 +29,12 @@ public class Product implements Serializable{
     private Double price;
     private String imgUrl;
 
-    //Atributos básicos
-    //Um produto varias categoria, e conjunto(Set) em vez de listas(List)
-    //para garantir que um produto não tenha varias categorias
-    @Transient
-    private Set<Category> categories = new HashSet<>();
+    //Associações
+    @ManyToMany //Um produtos com varias categorias e uma categoria com varios produtos
+    @JoinTable(name = "tb_product_category", //tabela para relacionar produto com categoria
+    joinColumns = @JoinColumn(name = "product_id"), //Chave estrangeira que relaciona com a tabela de produtos
+    inverseJoinColumns = @JoinColumn(name = "category_id")) //Chave estrangeira que relaciona com a tabela de categoria
+    private Set<Category> categories = new HashSet<>(); //Conjunto de categorias
 
     //Construtores:
     public Product(){

@@ -4,12 +4,14 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
-import jakarta.persistence.Transient;
 
 @Entity
 @Table(name = "tb_category")
@@ -23,8 +25,10 @@ public class Category implements Serializable {
     private String name;
 
     //Associações:
-    @Transient
-    private Set<Product> products = new HashSet<>();
+    @JsonIgnore
+    @ManyToMany(mappedBy = "categories") //Um produtos com varias categorias e uma categoria com varios produtos
+                                        //mapeado na classe Product pelo conjunto de categorias
+    private Set<Product> products = new HashSet<>(); //Conjunto de produtos
 
     //Construtores:
     public Category(){
